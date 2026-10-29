@@ -40,6 +40,26 @@ namespace FSDProject.Controllers.Ajax
 
             return new JsonResult("Data is saved");
         }
-
+        [HttpPost]
+        public JsonResult Delete(int id)
+        {
+            var data = _context.Employees.Where(e => e.Id == id).SingleOrDefault();
+            _context.Employees.Remove(data);
+            _context.SaveChanges();
+            return new JsonResult("Data is Deleted");
+        }
+        [HttpGet]
+        public JsonResult Edit(int id)
+        {
+            var data = _context.Employees.Where(e => e.Id == id).SingleOrDefault();
+            return new JsonResult(data);
+        }
+        [HttpPost]
+        public JsonResult Update(Employee employee)
+        {
+            _context.Employees.Update(employee);
+            _context.SaveChanges();
+            return new JsonResult("Data Update!");
+        }
     }
 }
