@@ -29,6 +29,18 @@ namespace FSDProject.Controllers.Account
 
             return View();
         }
+        public IActionResult UserNameIsExist(string userName)
+        {
+            var data = _context.Users.Where(e => e.UserName == userName).SingleOrDefault();
+            if (data != null)
+            {
+                return Json($"UserName {userName} already exists in users");
+            }
+            else
+            {
+                return Json(true);
+            }
+        }
         [HttpPost]
         public IActionResult Login(LoginSignUpModel model)
         {
@@ -71,6 +83,8 @@ namespace FSDProject.Controllers.Account
             return RedirectToAction("Login","Account");
 
         }
+       // [AcceptVerbs("Post","Get")]
+    
         public IActionResult SignUp()
         {
             return View();

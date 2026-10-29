@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace FSDProject.Models.ViewModel
      
         public int Id { get; set; }
         [Required(ErrorMessage ="Pleas Enter UserName")]
+        [Remote(action: "UserNameIsExist", controller: "Account")]
         public string UserName { get; set; }
         [Required(ErrorMessage = "Pleas Enter Email")]
         public string Email { get; set; }

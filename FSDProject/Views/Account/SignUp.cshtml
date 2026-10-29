@@ -42,18 +42,19 @@
                             <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                         </div>
                     </div>
-                </div>  
+                </div>
                 <div class="form-group">
                     <label asp-for="IsActive"></label>
                     <input type="checkbox" checked="checked" asp-for="IsActive" />
                 </div>
                 <div class="form-group">
-                    <input type="submit" class="btn btn-success btn-lg mb-1 float-right" value="Registration"/>
-
+                    <input type="submit" class="btn btn-success btn-lg mb-1 float-right" value="Registration" />
                 </div>
             </form>
 
         </div>
     </div>
 </div>
-
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
