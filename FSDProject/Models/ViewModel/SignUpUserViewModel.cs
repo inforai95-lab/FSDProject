@@ -18,6 +18,7 @@ namespace FSDProject.Models.ViewModel
         public string Email { get; set; }
         [Required(ErrorMessage = "Pleas Enter Mobile")]
         [Display(Name ="Mobile Number")]
+        [Remote(action: "MobileIsExist", controller:"Account")]
         public long? Mobile { get; set; }
         [Required(ErrorMessage = "Pleas Enter Password")]
         public string Password { get; set; }

@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace FSDProject.Controllers.Account
@@ -41,6 +42,19 @@ namespace FSDProject.Controllers.Account
                 return Json(true);
             }
         }
+        [AcceptVerbs("Post","Get")]
+        public IActionResult MobileIsExist(long? mobile)
+        {
+            var data = _context.Users.Where(e => e.Mobile == mobile).SingleOrDefault();
+            if (data != null)
+            {
+                return Json($"Mobile {mobile} already exists in users");
+            }
+            else
+            {
+                return Json(true);
+            }
+        }
         [HttpPost]
         public IActionResult Login(LoginSignUpModel model)
         {
@@ -49,7 +63,7 @@ namespace FSDProject.Controllers.Account
                 var data = _context.Users.Where(e => e.UserName == model.UserName).SingleOrDefault();
                 if(data!=null)
                 {
-                    bool isValid = (data.UserName == model.UserName && data.Password == model.Password);
+                    bool isValid = (data.UserName == model.UserName && DecryptPassword(data.Password) == model.Password);
                     if(isValid)
                     {
                         var identity = new ClaimsIdentity(new[] {new Claim(ClaimTypes.Name, model.UserName) },
@@ -77,6 +91,33 @@ namespace FSDProject.Controllers.Account
             }
            
         }
+        public static string EncryptPassword(string password)
+        {
+            if(string.IsNullOrEmpty(password))
+            {
+                return null;
+            }
+            else
+            {
+                byte[] storePassword = ASCIIEncoding.ASCII.GetBytes(password);
+                string encryptedPassword = Convert.ToBase64String(storePassword);
+                return encryptedPassword;
+            }
+           
+        }
+        public  static string  DecryptPassword(string password)
+        {
+            if(string.IsNullOrEmpty(password))
+            {
+                return null;
+            }
+            else
+            {
+                byte[] encryptedPassword = Convert.FromBase64String(password);
+                string decryptedPassword = ASCIIEncoding.ASCII.GetString(encryptedPassword);
+                return decryptedPassword;
+            }
+        }
         public IActionResult LogOut()
         {
             HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
@@ -99,7 +140,7 @@ namespace FSDProject.Controllers.Account
                     UserName=model.UserName,
                     Email=model.Email,
                     Mobile=model.Mobile,
-                    Password=model.Password,
+                    Password=EncryptPassword(model.Password),
                     IsActive=model.IsActive
                 };
                 _context.Users.Add(data);
